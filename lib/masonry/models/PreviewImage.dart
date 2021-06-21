@@ -4,21 +4,23 @@ import 'dart:typed_data';
 import 'package:photo_manager/photo_manager.dart';
 
 class PreviewImage {
-  final AssetEntity asset;
+  final AssetEntity _asset;
   final String id;
 
-  PreviewImage({required this.asset}) : id = asset.id;
+  PreviewImage({required AssetEntity asset})
+      : _asset = asset,
+        id = asset.id;
 
   double heightFor(double width) {
-    return asset.height * width / asset.width;
+    return _asset.height * width / _asset.width;
   }
 
-  Future<Uint8List?> preview(double width) {
-    return asset.thumbDataWithSize(
+  Future<Uint8List?> previewWithFixedWidth(double width) {
+    return _asset.thumbDataWithSize(
         width.round(), this.heightFor(width).round());
   }
 
   Future<File?> fullImageFile() {
-    return asset.file;
+    return _asset.file;
   }
 }

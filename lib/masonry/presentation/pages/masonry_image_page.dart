@@ -26,7 +26,6 @@ class _MasonryImagePageState extends State<MasonryImagePage> {
       key: Key(preview.id),
       previewImage: preview,
       width: columnWidth,
-      height: preview.heightFor(columnWidth),
       padding: EdgeInsets.all(4),
     );
   }

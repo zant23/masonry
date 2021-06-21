@@ -10,41 +10,37 @@ import 'package:masonry/masonry/presentation/pages/detail_image_page.dart';
 class PreviewImageContainer extends StatelessWidget {
   final PreviewImage previewImage;
   final double width;
-  final double height;
   final EdgeInsets? padding;
   const PreviewImageContainer(
-      {Key? key,
-      required this.previewImage,
-      required this.width,
-      required this.height,
-      this.padding})
+      {Key? key, required this.previewImage, required this.width, this.padding})
       : super(key: key);
+
+  _onTap(BuildContext context) async {
+    File? imageFile = await previewImage.fullImageFile();
+    if (imageFile != null) {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => DetailImagePage(imageFile: imageFile)));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<Uint8List?>(
-      future: previewImage.preview(width),
+      future: previewImage.previewWithFixedWidth(width),
       builder: (BuildContext context, snapshot) {
         return Material(
           child: Padding(
             padding: padding ?? EdgeInsets.all(0),
             child: InkWell(
-              onTap: () async {
-                File? imageFile = await previewImage.fullImageFile();
-                if (imageFile != null) {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              DetailImagePage(imageFile: imageFile)));
-                }
-              },
+              onTap: () => _onTap(context),
               child: ClipRRect(
                   borderRadius: BorderRadius.circular(5),
                   child: Container(
                     width: width,
-                    height: height,
-                    color: kSecondaryColor,
+                    height: previewImage.heightFor(width),
+                    color: kPreviewBackgroundColor,
                     child: (snapshot.data != null)
                         ? ExtendedImage.memory(snapshot.data!,
                             fit: BoxFit.cover)

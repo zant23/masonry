@@ -1,5 +1,5 @@
 import 'package:masonry/masonry/models/PreviewImage.dart';
-import 'package:masonry/masonry/services/images/services/failures.dart';
+import 'package:masonry/masonry/services/images/failures.dart';
 import 'package:photo_manager/photo_manager.dart';
 
 class ImageService {

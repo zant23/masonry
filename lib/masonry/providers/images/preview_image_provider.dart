@@ -3,8 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:masonry/masonry/models/PreviewImage.dart';
 import 'package:masonry/masonry/presentation/constants/constants.dart';
 import 'package:masonry/masonry/providers/images/failures.dart';
-import 'package:masonry/masonry/services/images/services/failures.dart';
-import 'package:masonry/masonry/services/images/services/image_service.dart';
+import 'package:masonry/masonry/services/images/failures.dart';
+import 'package:masonry/masonry/services/images/image_service.dart';
 
 class PreviewImageProvider extends ChangeNotifier {
   List<PreviewImage> _previewImages = [];
@@ -25,20 +25,20 @@ class PreviewImageProvider extends ChangeNotifier {
       _currentPage++;
       notifyListeners();
       return none();
-    } on ImageServiceFailure catch (e) {
-      return some(_toImageProviderFailure(e));
     } catch (e) {
-      return some(
-          ImageProviderFailure.unknown('The app seems to have a problem.'));
+      return some(_toImageProviderFailure(e));
     }
   }
 
-  static ImageProviderFailure _toImageProviderFailure(
-      ImageServiceFailure imageServiceFailure) {
-    return imageServiceFailure.map(
-        unauthorized: (_) => ImageProviderFailure.unAuthorized(
-            'The App is not authorized to view Images. Please go to the App Settings to change that.'),
-        albumNotFound: (_) => ImageProviderFailure.albumNotFound(
-            "It seems like you havent taken any pictures yet."));
+  static ImageProviderFailure _toImageProviderFailure(Object error) {
+    try {
+      return (error as ImageServiceFailure).map(
+          unauthorized: (_) => ImageProviderFailure.unAuthorized(
+              'The App is not authorized to view Images. Please go to the App Settings to change that.'),
+          albumNotFound: (_) => ImageProviderFailure.albumNotFound(
+              "It seems like you havent taken any pictures yet."));
+    } catch (e) {
+      return ImageProviderFailure.unknown('The app seems to have a problem.');
+    }
   }
 }
