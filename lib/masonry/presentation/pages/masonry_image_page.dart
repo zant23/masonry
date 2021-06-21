@@ -3,7 +3,6 @@ import 'dart:collection';
 import 'package:dartz/dartz.dart' as dartz;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:masonry/masonry/models/PreviewImage.dart';
 import 'package:masonry/masonry/presentation/constants/constants.dart';
 import 'package:masonry/masonry/presentation/constants/palette.dart';
@@ -11,6 +10,7 @@ import 'package:masonry/masonry/presentation/widgets/image_preview.dart';
 import 'package:masonry/masonry/providers/images/failures.dart';
 import 'package:masonry/masonry/providers/images/preview_image_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:waterfall_flow/waterfall_flow.dart';
 
 class MasonryImagePage extends StatefulWidget {
   const MasonryImagePage({Key? key}) : super(key: key);
@@ -81,23 +81,20 @@ class _MasonryImagePageState extends State<MasonryImagePage> {
             actions: [PopupMenuButton(itemBuilder: (context) => [])],
           ),
           Selector<PreviewImageProvider, List<PreviewImage>>(
-              selector: (_, assetImageProvider) =>
-                  assetImageProvider.previewImages,
-              builder: (context, imageAssets, child) {
-                return SliverStaggeredGrid.countBuilder(
-                  crossAxisCount: kMasonryColumns,
-                  itemCount: imageAssets.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    if (index == imageAssets.length - 20) {
-                      _fetchMoreImagePreviews();
-                    }
-                    return _buildPreviewContainer(imageAssets[index]);
-                  },
-                  staggeredTileBuilder: (int index) => StaggeredTile.count(1,
-                      imageAssets[index].heightFor(columnWidth) / columnWidth),
-                  mainAxisSpacing: 0,
-                  crossAxisSpacing: 0,
-                );
+              selector: (_, previewImageProvider) =>
+                  previewImageProvider.previewImages,
+              builder: (context, previewImages, child) {
+                return SliverWaterfallFlow(
+                    delegate: SliverChildBuilderDelegate(
+                        (BuildContext context, int index) {
+                      if (index == previewImages.length - 20) {
+                        _fetchMoreImagePreviews();
+                      }
+                      return _buildPreviewContainer(previewImages[index]);
+                    }, childCount: previewImages.length),
+                    gridDelegate:
+                        SliverWaterfallFlowDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3));
               })
         ],
       ),
