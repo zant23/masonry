@@ -1,5 +1,3 @@
-import 'dart:collection';
-
 import 'package:dartz/dartz.dart' as dartz;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -23,20 +21,14 @@ class _MasonryImagePageState extends State<MasonryImagePage> {
   late final double columnWidth =
       MediaQuery.of(context).size.width / kMasonryColumns;
 
-  Map<String, Widget> previewContainerCache = HashMap();
-
   Widget _buildPreviewContainer(PreviewImage preview) {
-    previewContainerCache.putIfAbsent(
-        preview.id,
-        () => PreviewImageContainer(
-              key: Key(preview.id),
-              previewImage: preview,
-              width: columnWidth,
-              height: preview.heightFor(columnWidth),
-              padding: EdgeInsets.all(4),
-            ));
-
-    return previewContainerCache[preview.id]!;
+    return PreviewImageContainer(
+      key: Key(preview.id),
+      previewImage: preview,
+      width: columnWidth,
+      height: preview.heightFor(columnWidth),
+      padding: EdgeInsets.all(4),
+    );
   }
 
   @override
@@ -94,7 +86,7 @@ class _MasonryImagePageState extends State<MasonryImagePage> {
                     }, childCount: previewImages.length),
                     gridDelegate:
                         SliverWaterfallFlowDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 3));
+                            crossAxisCount: kMasonryColumns));
               })
         ],
       ),
