@@ -38,14 +38,18 @@ class PreviewImageContainer extends StatelessWidget {
               child: ClipRRect(
                   borderRadius: BorderRadius.circular(5),
                   child: Container(
-                    width: width,
-                    height: previewImage.heightFor(width),
-                    color: kPreviewBackgroundColor,
-                    child: (snapshot.data != null)
-                        ? ExtendedImage.memory(snapshot.data!,
-                            fit: BoxFit.cover)
-                        : SizedBox.shrink(),
-                  )),
+                      width: width,
+                      height: previewImage.heightFor(width),
+                      color: kPreviewBackgroundColor,
+                      child: AnimatedSwitcher(
+                        duration: Duration(milliseconds: 250),
+                        child: (snapshot.data != null)
+                            ? ExtendedImage.memory(snapshot.data!,
+                                width: width,
+                                height: previewImage.heightFor(width),
+                                fit: BoxFit.cover)
+                            : SizedBox.shrink(),
+                      ))),
             ),
           ),
         );

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'palette.dart';
 
 const int kMasonryColumns = 3;
-const int kFetchImagePageSize = 60;
+const int kFetchImagePageSize = 200;
 
 const TextStyle bodyTextStyle =
     TextStyle(color: kDefaultTextColor, fontSize: 20);
