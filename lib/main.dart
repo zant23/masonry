@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:masonry/masonry/presentation/constants/palette.dart';
 import 'package:masonry/masonry/presentation/pages/masonry_image_page.dart';
-import 'package:masonry/masonry/providers/images/preview_image_provider.dart';
-import 'package:provider/provider.dart';
 
 void main() {
-  runApp(ChangeNotifierProvider(
-      create: (context) => PreviewImageProvider(), child: MyApp()));
+  runApp(ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -17,7 +15,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
         primaryColor: kDefaultTextColor,
-        textTheme: TextTheme(
+        textTheme: const TextTheme(
           bodyText1: TextStyle(color: kDefaultTextColor),
         ),
         appBarTheme: AppBarTheme.of(context).copyWith(
@@ -36,7 +34,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: MasonryImagePage(),
+      home: const MasonryImagePage(),
     );
   }
 }

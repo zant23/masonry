@@ -1,14 +1,11 @@
-import 'package:dartz/dartz.dart' as dartz;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:masonry/masonry/models/PreviewImage.dart';
+import 'package:hooks_riverpod/all.dart';
+import 'package:masonry/masonry/controllers/image_controller.dart';
 import 'package:masonry/masonry/presentation/constants/constants.dart';
 import 'package:masonry/masonry/presentation/constants/palette.dart';
-import 'package:masonry/masonry/presentation/widgets/image_preview.dart';
-import 'package:masonry/masonry/providers/images/failures.dart';
-import 'package:masonry/masonry/providers/images/preview_image_provider.dart';
-import 'package:provider/provider.dart';
-import 'package:waterfall_flow/waterfall_flow.dart';
+import 'package:masonry/masonry/presentation/widgets/image_preview_list.dart';
+import 'package:masonry/masonry/repositories/images/failures.dart';
 
 class MasonryImagePage extends StatefulWidget {
   const MasonryImagePage({Key? key}) : super(key: key);
@@ -20,33 +17,6 @@ class MasonryImagePage extends StatefulWidget {
 class _MasonryImagePageState extends State<MasonryImagePage> {
   late final double columnWidth =
       MediaQuery.of(context).size.width / kMasonryColumns;
-
-  Widget _buildPreviewContainer(PreviewImage preview) {
-    return PreviewImageContainer(
-      key: Key(preview.id),
-      previewImage: preview,
-      width: columnWidth,
-      padding: EdgeInsets.all(4),
-    );
-  }
-
-  @override
-  void initState() {
-    if (context.read<PreviewImageProvider>().previewImages.isEmpty) {
-      _fetchMoreImagePreviews();
-    }
-    super.initState();
-  }
-
-  _fetchMoreImagePreviews() async {
-    dartz.Option<ImageProviderFailure> failureOption =
-        await context.read<PreviewImageProvider>().fetchImages();
-
-    failureOption.fold(
-        () => null,
-        (failure) => ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(failure.message))));
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,22 +41,16 @@ class _MasonryImagePageState extends State<MasonryImagePage> {
             pinned: true,
             actions: [PopupMenuButton(itemBuilder: (context) => [])],
           ),
-          Selector<PreviewImageProvider, List<PreviewImage>>(
-              selector: (_, previewImageProvider) =>
-                  previewImageProvider.previewImages,
-              builder: (context, previewImages, child) {
-                return SliverWaterfallFlow(
-                    delegate: SliverChildBuilderDelegate(
-                        (BuildContext context, int index) {
-                      if (index == previewImages.length - 20) {
-                        _fetchMoreImagePreviews();
-                      }
-                      return _buildPreviewContainer(previewImages[index]);
-                    }, childCount: previewImages.length),
-                    gridDelegate:
-                        SliverWaterfallFlowDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: kMasonryColumns));
-              })
+          ProviderListener(
+            provider: imageControllerErrorProvider,
+            onChange:
+                (context, StateController<ImageRepositoryFailure?> failure) {
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  backgroundColor: Colors.red,
+                  content: Text(failure.state!.message)));
+            },
+            child: const ImagePreviewList(),
+          )
         ],
       ),
     );
