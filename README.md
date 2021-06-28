@@ -6,7 +6,7 @@ A small Image Gallery Template for Flutter.
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-This project uses Flutter to implement an Image Gallery which displays the local Photos on the device. The architecture is inspired by a Clean Architecture layout presented in the book from Robert C. Martin. To access and display the images on the device, the following packages were used:
+This project uses Flutter to implement an Image Gallery which displays the local Images from the device in a masonry grid layout. The code architecture is inspired by a Clean Architecture layout presented in the book from Robert C. Martin. To access and display the images on the device, the following packages were used:
 * [Photo Manager](https://pub.dev/packages/photo_manager)
 * [Photo View](https://pub.dev/packages/photo_view)
 * [Waterfall Flow](https://pub.dev/packages/waterfall_flow)
