@@ -17,7 +17,7 @@ Additionally as a State Management solution [Hooks Riverpod](https://pub.dev/pac
 <!-- GETTING STARTED -->
 ## Getting Started
 
-To get started clone this project into onto your local machine. Afterwards you can start open the code with your favourite editor and start the project as u are used to from Flutter. If you dont have a Flutter workflow yet, check out the Get Started guide from Flutter itself: 
+To get started clone this project to a folder onto your local machine. Afterwards you can open the code with your favourite editor and start the project as u are used to from Flutter projects. If you dont have a Flutter workflow yet, check out the Get Started guide from Flutter itself: 
 
 https://flutter.dev/docs/get-started/install
 
